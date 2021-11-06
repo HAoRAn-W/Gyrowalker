@@ -26,3 +26,18 @@ Framework: Mbed
 |cutoff | TODO|
 
 
+## Steps
+1.set up SPI device
+
+2.configure gyrometer control registers
+
+3.read from gyrometer every t seconds
+
+4.convert the raw data to readble value by resolution
+
+5.display on LCD
+
+6.pwm
+
+7.calculate distance with timer
+

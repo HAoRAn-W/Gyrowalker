@@ -21,6 +21,8 @@ DigitalOut cs(PC_1);
 char buffer[6]; // raw daat from gyro
 int16_t data[3]; // combined result from gyro
 
+float resolution = 1.0f;
+
 // write data to registers in gyrometer
 void writeByte(uint8_t address, uint8_t data)
 {
@@ -38,38 +40,16 @@ void initiateGyro(){
 
 void getGyroValue(){
   cs = 0;
-  gyroscope.write(OUT_X_L | 0x80);
-  buffer[0] = gyroscope.write(0xff);
-  cs = 1;
-
-  cs = 0;
-  gyroscope.write(OUT_X_H | 0x80);
-  buffer[1] = gyroscope.write(0xff);
-  cs = 1;
-
-  cs = 0;
-  gyroscope.write(OUT_Y_L | 0x80);
-  buffer[2] = gyroscope.write(0xff);
-  cs = 1;
-
-  cs = 0;
-  gyroscope.write(OUT_Y_H | 0x80);
-  buffer[3] = gyroscope.write(0xff);
-  cs = 1;
-
-  cs = 0;
-  gyroscope.write(OUT_Z_L | 0x80);
-  buffer[4] = gyroscope.write(0xff);
-  cs = 1;
-
-  cs = 0;
-  gyroscope.write(OUT_Z_H | 0x80);
-  buffer[5] = gyroscope.write(0xff);
-  cs = 1;
-
-  for(int i = 0; i < 3; i++){
-    data[i] = ((buffer[2 * i + 1] << 8) | buffer[2 * i]);
+  gyroscope.write(OUT_X_L | 0x80 | 0x40);
+  for(int i = 0; i < 5; i++){
+    buffer[i] = gyroscope.write(0xff);
   }
+  cs = 1;
+
+
+  data[0] = buffer[1] << 8 | buffer[0];
+  data[1] = buffer[3] << 8 | buffer[2];
+  data[2] = buffer[5] << 8 | buffer[4];
 }
 
 
@@ -80,9 +60,9 @@ int main()
   while (1)
   {
     getGyroValue();
-    for(int i = 0; i < 3; i++){
-      printf("%d ", data[i]);
-    }
+    printf("x=%d\r\n", data[0]);
+    printf("y=%d\r\n", data[1]);
+    printf("z=%d\r\n", data[2]);
 
     wait_us(100000);
   }
