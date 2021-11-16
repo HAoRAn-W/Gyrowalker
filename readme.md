@@ -27,6 +27,8 @@ Framework: Mbed
 
 
 ## Steps
+0.button control start(todo)
+
 1.set up SPI device
 
 2.configure gyrometer control registers
