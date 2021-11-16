@@ -39,7 +39,7 @@ Framework: Mbed
 
 5.display on LCD
 
-6.pwm
+6.collect 20 seconds of velocity data, sampled at 0.5 second intervals
 
 7.calculate distance with timer
 
