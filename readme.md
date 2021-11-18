@@ -9,6 +9,10 @@ calculate distance
 
 LCD display(optional) to show distance
 
+a start/stop button
+
+LED indicates movement
+
 ## Hardware & Framework
 Board: STM32F429I
 
