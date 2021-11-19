@@ -32,13 +32,13 @@ int16_t x_data = 0;
 int16_t y_data = 0;
 int16_t z_data = 0;
 
-int16_t x_threshold = 0;
-int16_t y_threshold = 0;
-int16_t z_threshold = 0;
+int16_t x_threshold;
+int16_t y_threshold;
+int16_t z_threshold;
 
-int16_t x_sample = 0;
-int16_t y_sample = 0;
-int16_t z_sample = 0;
+int16_t x_sample;
+int16_t y_sample;
+int16_t z_sample;
 
 // write data to registers in gyrometer
 void WriteByte(uint8_t address, uint8_t data)
@@ -63,34 +63,21 @@ void CalibrateGyroscope(){
   int16_t sumX = 0;
   int16_t sumY = 0;
   int16_t sumZ = 0;
-  int16_t sigmaX = 0;
-  int16_t sigmaY = 0;
-  int16_t sigmaZ = 0;
 
   for(int i = 0; i < 128; i++){
     GetGyroValue();
     sumX += x_data;
     sumY += y_data;
     sumZ += z_data;
-
-    sigmaX += x_data * x_data;
-    sigmaY += y_data * y_data;
-    sigmaZ += z_data * z_data;
-
-    wait_us(1000);
+    x_threshold = max(x_threshold, x_data);
+    y_threshold = max(y_threshold, y_data);
+    z_threshold = max(z_threshold, z_data);
+    wait_us(10000);
   }
 
   x_sample = sumX >> 7;
   y_sample = sumY >> 7;
   z_sample = sumZ >> 7;
-
-
-  x_threshold = sqrt((sigmaX >> 7) - (x_sample * x_sample));
-  y_threshold = sqrt((sigmaY >> 7) - (y_sample * y_sample));
-  z_threshold = sqrt((sigmaZ >> 7) - (z_sample * z_sample));
-
-
-
 }
 
 void InitiateGyroscope()
@@ -131,11 +118,7 @@ int main()
 {
   InitiateGyroscope();
   while(1){
-    // GetGyroValue();
     GetCalibratedRawData();
-    printf("x_threshold %d, \r\n", x_threshold);
-    printf("y_threshold %d, \r\n", y_threshold);
-    printf("z_threshold %d, \r\n", z_threshold);
     printf("%d, ", z_data);
   }
 }
