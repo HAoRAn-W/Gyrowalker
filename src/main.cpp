@@ -23,7 +23,8 @@
 #define OUT_Z_H 0x2D
 
 #define SENSITIVITY 0.07f
-#define MY_LEG 0.8f
+#define MY_LEG 0.8f // put board on left leg 0.8m above ground
+#define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
 
 SPI gyroscope(PF_9, PF_8, PF_7); // mosi, miso, sclk
 DigitalOut cs(PC_1);
@@ -39,6 +40,9 @@ int16_t z_threshold;
 int16_t x_sample;
 int16_t y_sample;
 int16_t z_sample;
+
+bool sample_falg = false;
+int samplecount = 0;
 
 // write data to registers in gyrometer
 void WriteByte(uint8_t address, uint8_t data)
@@ -94,15 +98,24 @@ void InitiateGyroscope()
   CalibrateGyroscope();  // calibrate the gyroscope and find the threshold for x, y, and z.
 }
 
+/* 
+* convert the raw data of z axis to velocity
+*/
+float ConvertTOVelocity(int16_t raw_data){
+  float velocity = raw_data * SENSITIVITY * DEGREE_TO_RAD * MY_LEG;
+  printf("velocity: %f, \r\n", velocity);
+  return velocity;
+}
 
-
+/*
+* make sure you are connecting to gyroscope
+*/
 int WhoAmI(){
   cs = 0;
   gyroscope.write(STATUS_REG | 0x80);
   int stat = gyroscope.write(0xff);
   return stat;
 }
-
 
 void GetCalibratedRawData(){
   GetGyroValue();
@@ -114,12 +127,39 @@ void GetCalibratedRawData(){
   if(abs(z_data) < abs(z_threshold)) z_data = 0;
 }
 
+void SampleVelocity(){
+  sample_falg = true;
+  samplecount++;
+}
+
 int main()
 {
   InitiateGyroscope();
+  Ticker ticker;
+  // ticker.attach(&SampleVelocity, 500ms);
+  float distance = 0.0f;
+
   while(1){
-    // get calibrated data
+    wait_us(500000);
     GetCalibratedRawData();
-    printf("%d, ", z_data);
+    float v = ConvertTOVelocity(z_data);
+    distance += (v/2);
+    printf("distance: %f, \r\n", distance);
+
+    // if(sample_falg){
+    //   GetCalibratedRawData();
+    //   int16_t v = ConvertTOVelocity(z_data);
+    //   // printf("velocity: %d, \r\n", v);
+    //   distance += (v >> 1);
+    //   if(samplecount == 20){
+    //     printf("distance: %d, \r\n", distance);
+    //     distance = 0;
+    //     samplecount = 0;
+    //   }
+    //   sample_falg = false;
+    // }
+    // get calibrated data
+    // GetCalibratedRawData();
+    // printf("%d, ", z_data);
   }
 }
