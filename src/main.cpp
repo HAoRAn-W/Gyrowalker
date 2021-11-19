@@ -118,6 +118,7 @@ int main()
 {
   InitiateGyroscope();
   while(1){
+    // get calibrated data
     GetCalibratedRawData();
     printf("%d, ", z_data);
   }
