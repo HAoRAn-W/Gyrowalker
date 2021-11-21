@@ -22,7 +22,7 @@
 #define OUT_Z_L 0x2C
 #define OUT_Z_H 0x2D
 
-#define SENSITIVITY 0.07f
+#define SENSITIVITY 0.00875f
 #define MY_LEG 0.8f // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
 
@@ -91,9 +91,9 @@ void InitiateGyroscope()
   gyroscope.format(8, 3); // 8 bits per SPI frame; polarity 1, phase 0
   gyroscope.frequency(1000000); // clock frequency deafult 1 MHz max:10MHz
 
-  WriteByte(CTRL_REG_1, 0x0f); // ODR  Bandwidth , enable all 3 axises
+  WriteByte(CTRL_REG_1, 0x8f); // ODR  Bandwidth , enable all 3 axises
   WriteByte(CTRL_REG_2, 0x00); // no high pass filter
-  WriteByte(CTRL_REG_4, 0x00); // LSB, full sacle selection: 245dps
+  WriteByte(CTRL_REG_4, 0x10); // LSB, full sacle selection: 500dps
 
   CalibrateGyroscope();  // calibrate the gyroscope and find the threshold for x, y, and z.
 }
@@ -143,7 +143,7 @@ int main()
     // wait_us(500000);
     // GetCalibratedRawData();
     // float v = ConvertTOVelocity(z_data);
-    // distance += (v/2);
+    // distance += abs(v/2);
     // printf("distance: %f, \r\n", distance);
 
     // if(sample_falg){
