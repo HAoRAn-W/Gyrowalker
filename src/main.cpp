@@ -22,7 +22,9 @@
 #define OUT_Z_L 0x2C
 #define OUT_Z_H 0x2D
 
-#define SENSITIVITY 0.00875f
+#define SENSITIVITY_245 0.00875f
+#define SENSITIVITY_500 0.0175f
+#define SENSITIVITY_2000 0.07f
 #define MY_LEG 0.8f // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
 
@@ -57,9 +59,9 @@ void GetGyroValue()
 {
   cs = 0;
   gyroscope.write(OUT_X_L | 0x80 | 0x40);
-  x_data = gyroscope.write(0xff) << 8 | gyroscope.write(0xff);
-  y_data = gyroscope.write(0xff) << 8 | gyroscope.write(0xff);
-  z_data = gyroscope.write(0xff) << 8 | gyroscope.write(0xff);
+  x_data = gyroscope.write(0xff) | gyroscope.write(0xff) << 8 ;
+  y_data = gyroscope.write(0xff) | gyroscope.write(0xff) << 8 ;
+  z_data = gyroscope.write(0xff) | gyroscope.write(0xff) << 8 ;
   cs = 1;
 }
 
@@ -91,7 +93,7 @@ void InitiateGyroscope()
   gyroscope.format(8, 3); // 8 bits per SPI frame; polarity 1, phase 0
   gyroscope.frequency(1000000); // clock frequency deafult 1 MHz max:10MHz
 
-  WriteByte(CTRL_REG_1, 0x8f); // ODR  Bandwidth , enable all 3 axises
+  WriteByte(CTRL_REG_1, 0xcf); // ODR  Bandwidth , enable all 3 axises
   WriteByte(CTRL_REG_2, 0x00); // no high pass filter
   WriteByte(CTRL_REG_4, 0x10); // LSB, full sacle selection: 500dps
 
@@ -102,7 +104,7 @@ void InitiateGyroscope()
 * convert the raw data of z axis to velocity
 */
 float ConvertTOVelocity(int16_t raw_data){
-  float velocity = raw_data * SENSITIVITY * DEGREE_TO_RAD * MY_LEG;
+  float velocity = raw_data * SENSITIVITY_2000 * DEGREE_TO_RAD * MY_LEG;
   printf("velocity: %f, \r\n", velocity);
   return velocity;
 }
@@ -160,6 +162,7 @@ int main()
     // }
     // get calibrated data
     GetCalibratedRawData();
-    printf("%d, ", z_data);
+    float speed = z_data * SENSITIVITY_500 * DEGREE_TO_RAD;
+    printf("%f, ", speed);
   }
 }
