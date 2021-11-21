@@ -93,7 +93,7 @@ void InitiateGyroscope()
 
   WriteByte(CTRL_REG_1, 0x0f); // ODR  Bandwidth , enable all 3 axises
   WriteByte(CTRL_REG_2, 0x00); // no high pass filter
-  WriteByte(CTRL_REG_4, 0x30); // LSB, full sacle selection: 2000dps
+  WriteByte(CTRL_REG_4, 0x00); // LSB, full sacle selection: 245dps
 
   CalibrateGyroscope();  // calibrate the gyroscope and find the threshold for x, y, and z.
 }
@@ -140,11 +140,11 @@ int main()
   float distance = 0.0f;
 
   while(1){
-    wait_us(500000);
-    GetCalibratedRawData();
-    float v = ConvertTOVelocity(z_data);
-    distance += (v/2);
-    printf("distance: %f, \r\n", distance);
+    // wait_us(500000);
+    // GetCalibratedRawData();
+    // float v = ConvertTOVelocity(z_data);
+    // distance += (v/2);
+    // printf("distance: %f, \r\n", distance);
 
     // if(sample_falg){
     //   GetCalibratedRawData();
@@ -159,7 +159,7 @@ int main()
     //   sample_falg = false;
     // }
     // get calibrated data
-    // GetCalibratedRawData();
-    // printf("%d, ", z_data);
+    GetCalibratedRawData();
+    printf("%d, ", z_data);
   }
 }
