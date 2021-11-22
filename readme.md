@@ -1,17 +1,13 @@
 # Gyrowalker
 A embbed project to measure distance with gyroscope
 ## Functions
-walk in straight line
+calculate distance with and only with gyroscope
 
-support different speed
+LCD display(todo) to show distance
 
-calculate distance
+a start/stop button(todo)
 
-LCD display(optional) to show distance
-
-a start/stop button
-
-LED indicates movement
+LED indicates movement(todo)
 
 ## Hardware & Framework
 Board: STM32F429I
@@ -23,23 +19,21 @@ Framework: Mbed
 ## Conigurations
 | field      | value |
 | ----------- | ----------- |
-| polarity      | 1       |
-| phase   | 1        |
-| scale   | 425 TODO      |
-| frequency   | 1MHz TODO       |
-|cutoff | TODO|
+| scale   | 500      |
+|output data rate | 800Hz|
+|cutoff frequency | 30Hz|
 
 
 ## Steps
-0.button control start(todo)
+0.press user button to start(todo), and LED flash when recording
 
 1.set up SPI device
 
-2.configure gyrometer control registers
+2.configure gyrometer control registers and calibrate(128 samples)
 
 3.read from gyrometer every t seconds
 
-4.convert the raw data to readble value by resolution
+4.convert the raw data linear velocity
 
 5.display on LCD
 
