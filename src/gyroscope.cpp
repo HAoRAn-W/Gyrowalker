@@ -18,6 +18,8 @@ int16_t x_sample;
 int16_t y_sample;
 int16_t z_sample;
 
+float sensitivity = 0.0f;
+
 Gyroscope_RawData *gyro_raw;
 Gyroscope_DPS gyro_dps;
 
@@ -72,11 +74,30 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
     WriteByte(CTRL_REG_2, init_parameters->hpf); // no high pass filter
     WriteByte(CTRL_REG_4, init_parameters->fullscale); // LSB, full sacle selection: 500dps
 
+    switch (init_parameters->fullscale)
+    {
+    case FULL_SCALE_245:
+      sensitivity = SENSITIVITY_245;
+      break;
+    
+    case FULL_SCALE_500:
+      sensitivity = SENSITIVITY_500;
+      break;
+    
+    case FULL_SCALE_2000:
+      sensitivity = SENSITIVITY_2000;
+      break;
+      
+    case FULL_SCALE_2000_ALT:
+      sensitivity = SENSITIVITY_2000;
+      break;
+    }
+
     CalibrateGyroscope(gyro_raw);  // calibrate the gyroscope and find the threshold for x, y, and z.
 }
 
 float ConvertTOVelocity(int16_t rawdata){
-  float velocity = rawdata * SENSITIVITY_2000 * DEGREE_TO_RAD * MY_LEG;
+  float velocity = rawdata * sensitivity * DEGREE_TO_RAD * MY_LEG;
   return velocity;
 }
 

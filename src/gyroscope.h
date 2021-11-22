@@ -31,9 +31,9 @@
 
 // Fullscale selections
 #define FULL_SCALE_245 0x00
-#define FULL_SCALE_245 0x10
+#define FULL_SCALE_500 0x10
 #define FULL_SCALE_2000 0x20
-#define FULL_SCALE_2000_alt 0x30
+#define FULL_SCALE_2000_ALT 0x30
 
 // Data rate and bandwidth
 
@@ -58,6 +58,13 @@ typedef struct
     int16_t y_raw;
     int16_t z_raw;
 } Gyroscope_RawData;
+
+typedef struct {
+    int16_t x_calibrated;
+    int16_t y_calibrated;
+    int16_t z_calibrated;
+} Gyroscope_CalibratedData;
+
 
 // Data in dps
 typedef struct
