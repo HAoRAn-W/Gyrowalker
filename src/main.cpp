@@ -48,7 +48,7 @@ int main()
 
       float distance = 0.0f;
       float v = 0.0f;
-      for(int i = 0; i < 20; i++){
+      for(int i = 0; i < 40; i++){
         wait_us(500000);
         GetCalibratedRawData();
         v = ConvertTOVelocity(raw_data.z_raw);
