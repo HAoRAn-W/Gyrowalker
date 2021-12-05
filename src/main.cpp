@@ -5,57 +5,63 @@
 */
 
 #include <mbed.h>
+#include <stdio.h>
 #include "gyroscope.h"
 
-bool flag = false;
-DigitalOut led(LED3);
-int idx = 0;
+bool start_flag = false;
 
-void flip(){
-  flag = true;
-  led = !led;
+InterruptIn irq(USER_BUTTON);
+
+void flip()
+{
+  start_flag = true;
 }
 
 int main()
 {
-  Gyroscope_Init_Parameters init_parameters;
-  init_parameters.odr = 0xff;
-  init_parameters.hpf = 0x00;
-  init_parameters.fullscale = 0x10;
-
   Gyroscope_RawData raw_data;
+  irq.fall(&flip);
 
-  // float buffer[40];
-  // Ticker ticker;
-  // ticker.attach(&flip, 1000ms);
+  // InitiateGyroscope(&init_parameters, &raw_data);
+  
 
+  //init file system
 
-  InitiateGyroscope(&init_parameters, &raw_data);
-  float distance = 0.0f;
+  //read from file, output data
+  float result = 0.0f;
 
   // sample 20 s  and stop, repeat output to terminal the distance.
-  while(1){
-    // GetCalibratedRawData();
-    // printf("%d, ", raw_data.z_raw);
-    wait_us(500000);
-    GetCalibratedRawData();
+  while (1)
+  {
+    printf("\rLast record: ");
+    fflush(stdout);
+    // read data
 
-    float v = ConvertTOVelocity(raw_data.z_raw);
-    distance += abs(v/2);
-    printf("distance: %f, \r\n", distance);
-    // if(idx == 40){
-    //   idx = 0;
-    //   for(int i = 0; i < 40; i++){
-    //     printf("%f, ", buffer[i]);
-    //   }
-    // }
-    // if(flag){
+    if (start_flag)
+    {
+      Gyroscope_Init_Parameters init_parameters;
+      init_parameters.odr = 0xff;
+      init_parameters.hpf = 0x00;
+      init_parameters.fullscale = 0x10;
+
+      InitiateGyroscope(&init_parameters, &raw_data);
+
+      float distance = 0.0f;
+      float v = 0.0f;
+      for(int i = 0; i < 20; i++){
+        wait_us(500000);
+        GetCalibratedRawData();
+        v = ConvertTOVelocity(raw_data.z_raw);
+        distance += abs(v / 2);
+        printf("distance: %d/%f, \r\n", i, distance);
+      }
       
-    //   // printf("%d, ", raw_data.z_raw);
-    //   buffer[idx++] = raw_data.z_raw;
-    //   flag = false;
-    //   led = !led;
-    // }
-    
+      
+      // write to file
+      start_flag = false;
+      // update print result
+      PowerOff(); // turn off gyroscope
+
+    }
   }
 }

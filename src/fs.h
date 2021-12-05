@@ -15,20 +15,12 @@
 BlockDevice *bd = BlockDevice::get_default_instance();
 LittleFileSystem fs("fs");
 
-void MountFileSystem()
-{
-}
+void MountFileSystem();
 
-void UnmountFileSystem()
-{
-}
+void UnmountFileSystem();
 
 // write data to file
-void WriteFile(int data)
-{
-}
+void WriteFile(int data);
 
 // read data from file
-void ReadFile()
-{
-}
+void ReadFile();

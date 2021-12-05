@@ -41,6 +41,7 @@
 // Convert constants
 #define MY_LEG 0.8f // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
+#define POWEROFF 0x00
 
 // Initialization parameters
 typedef struct
@@ -93,3 +94,6 @@ float ConvertTOVelocity(int16_t rawdata);
 
 // Get data
 void GetCalibratedRawData();
+
+//poweroff
+void PowerOff();

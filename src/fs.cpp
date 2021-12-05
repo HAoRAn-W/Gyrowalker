@@ -36,7 +36,7 @@ void UnmountFileSystem()
 }
 
 // write data to file
-void WriteFile(int data)
+void WriteFile(float data)
 {
     // Open the numbers file
     printf("Opening \"/fs/numbers.txt\"... ");
@@ -57,7 +57,7 @@ void WriteFile(int data)
 
         printf("\rWriting data: %d", data);
         fflush(stdout);
-        int err = fprintf(f, "newest distance: %d\n", data);
+        int err = fprintf(f, "%f m\n", data);
         if (err < 0)
         {
             printf("Fail :(\n");
@@ -69,17 +69,19 @@ void WriteFile(int data)
 // read data from file
 void ReadFile()
 {
-        // Display the numbers file
+    // Display the numbers file
     printf("Opening \"/fs/numbers.txt\"... ");
     fflush(stdout);
     FILE *f = fopen("/fs/numbers.txt", "r");
     printf("%s\n", (!f ? "Fail :(" : "OK"));
-    if (!f) {
+    if (!f)
+    {
         error("error: %s (%d)\n", strerror(errno), -errno);
     }
 
     printf("numbers:\n");
-    while (!feof(f)) {
+    while (!feof(f))
+    {
         int c = fgetc(f);
         printf("%c", c);
     }
@@ -88,7 +90,8 @@ void ReadFile()
     fflush(stdout);
     int err = fclose(f);
     printf("%s\n", (err < 0 ? "Fail :(" : "OK"));
-    if (err < 0) {
+    if (err < 0)
+    {
         error("error: %s (%d)\n", strerror(errno), -errno);
     }
 }
