@@ -33,6 +33,7 @@ int main()
   InitiateGyroscope(&init_parameters, &raw_data);
   float distance = 0.0f;
 
+  // sample 20 s  and stop, repeat output to terminal the distance.
   while(1){
     // GetCalibratedRawData();
     // printf("%d, ", raw_data.z_raw);
