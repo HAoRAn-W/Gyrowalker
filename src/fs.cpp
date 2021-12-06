@@ -1,14 +1,48 @@
 #include <mbed.h>
 #include "fs.h"
 
+BlockDevice *bd = BlockDevice::get_default_instance();
+LittleFileSystem fs("fs");
+FILE *f; // file handle
+
+// erase the block device if corrupted
+void erase()
+{
+    printf("\r\nInitializing the block device... ");
+    fflush(stdout);
+    int err = bd->init();
+    printf("%s\n", (err ? "Fail :(" : "OK"));
+    if (err)
+    {
+        error("error: %s (%d)\n", strerror(-err), err);
+    }
+
+    printf("Erasing the block device... ");
+    fflush(stdout);
+    err = bd->erase(0, bd->size());
+    printf("%s\n", (err ? "Fail :(" : "OK"));
+    if (err)
+    {
+        error("error: %s (%d)\n", strerror(-err), err);
+    }
+
+    printf("Deinitializing the block device... ");
+    fflush(stdout);
+    err = bd->deinit();
+    printf("%s\n", (err ? "Fail :(" : "OK"));
+    if (err)
+    {
+        error("error: %s (%d)\n", strerror(-err), err);
+    }
+}
+
 void MountFileSystem()
 {
-    // Try to mount the filesystem
     printf("Mounting the filesystem... ");
     fflush(stdout);
     int err = fs.mount(bd);
     printf("%s\n", (err ? "Fail :(" : "OK"));
-    if (err || FORCE_REFORMAT)
+    if (err)
     {
         // Reformat if we can't mount the filesystem
         printf("formatting... ");
@@ -24,7 +58,7 @@ void MountFileSystem()
 
 void UnmountFileSystem()
 {
-    // Tidy up
+    // Unmount the file system
     printf("Unmounting... ");
     fflush(stdout);
     int err = fs.unmount();
@@ -38,55 +72,85 @@ void UnmountFileSystem()
 // write data to file
 void WriteFile(float data)
 {
-    // Open the numbers file
-    printf("Opening \"/fs/numbers.txt\"... ");
+    // Open the data file
+    printf("Opening \"/fs/data.txt\"... ");
     fflush(stdout);
-    FILE *f = fopen("/fs/numbers.txt", "r+");
+    f = fopen("/fs/data.txt", "r+");
     printf("%s\n", (!f ? "Fail :(" : "OK"));
     if (!f)
     {
-        // Create the numbers file if it doesn't exist
+        // Create the data file if it doesn't exist
         printf("No file found, creating a new file... ");
         fflush(stdout);
-        f = fopen("/fs/numbers.txt", "w+");
+        f = fopen("/fs/data.txt", "w+");
         printf("%s\n", (!f ? "Fail :(" : "OK"));
         if (!f)
         {
             error("error: %s (%d)\n", strerror(errno), -errno);
         }
-
-        printf("\rWriting data: %d", data);
+        printf("Seeking file... ");
         fflush(stdout);
-        int err = fprintf(f, "%f m\n", data);
+        int err = fseek(f, 0, SEEK_SET);
+        printf("%s\n", (err < 0 ? "Fail :(" : "OK"));
         if (err < 0)
         {
-            printf("Fail :(\n");
             error("error: %s (%d)\n", strerror(errno), -errno);
         }
+    }
+
+    // Store number
+    fprintf(f, "%f\n", data);
+
+    // Flush between write and read on same file
+    fflush(f);
+
+    // Close the file which also flushes any cached writes
+    printf("Closing \"/fs/data.txt\"... ");
+    fflush(stdout);
+    int err = fclose(f);
+    printf("%s\n", (err < 0 ? "Fail :(" : "OK"));
+    if (err < 0)
+    {
+        error("error: %s (%d)\n", strerror(errno), -errno);
     }
 }
 
 // read data from file
-void ReadFile()
+void ReadFile(float *record)
 {
-    // Display the numbers file
-    printf("Opening \"/fs/numbers.txt\"... ");
+    // Display the data file
+    printf("Opening \"/fs/data.txt\"... ");
     fflush(stdout);
-    FILE *f = fopen("/fs/numbers.txt", "r");
+    f = fopen("/fs/data.txt", "r+");
     printf("%s\n", (!f ? "Fail :(" : "OK"));
     if (!f)
     {
-        error("error: %s (%d)\n", strerror(errno), -errno);
+        // error("error: %s (%d)\n", strerror(errno), -errno);
+        printf("No file found, creating a new file... ");
+        fflush(stdout);
+        f = fopen("/fs/data.txt", "w+");
+        printf("%s\n", (!f ? "Fail :(" : "OK"));
+        if (!f)
+        {
+            error("error: %s (%d)\n", strerror(errno), -errno);
+        }
+        printf("Seeking file... ");
+        fflush(stdout);
+        int err = fseek(f, 0, SEEK_SET);
+        printf("%s\n", (err < 0 ? "Fail :(" : "OK"));
+        if (err < 0)
+        {
+            error("error: %s (%d)\n", strerror(errno), -errno);
+        }
     }
 
-    printf("numbers:\n");
+    // float record;
     while (!feof(f))
     {
-        int c = fgetc(f);
-        printf("%c", c);
+        fscanf(f, "%f\n", record);
     }
 
-    printf("\rClosing \"/fs/numbers.txt\"... ");
+    printf("\rClosing \"/fs/data.txt\"... ");
     fflush(stdout);
     int err = fclose(f);
     printf("%s\n", (err < 0 ? "Fail :(" : "OK"));

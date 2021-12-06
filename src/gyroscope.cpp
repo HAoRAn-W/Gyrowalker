@@ -48,7 +48,7 @@ void CalibrateGyroscope(Gyroscope_RawData *rawdata)
   int16_t sumX = 0;
   int16_t sumY = 0;
   int16_t sumZ = 0;
-
+  printf("========[Calibrating...]========\r\n");
   for (int i = 0; i < 128; i++)
   {
     GetGyroValue(rawdata);
@@ -64,10 +64,12 @@ void CalibrateGyroscope(Gyroscope_RawData *rawdata)
   x_sample = sumX >> 7;
   y_sample = sumY >> 7;
   z_sample = sumZ >> 7;
+  printf("========[Calibration finish.]========\r\n");
 }
 
 void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_RawData *init_raw_data)
 {
+  printf("\r\n========[Initializing gyroscope...]========\r\n");
   led = !led;
   gyro_raw = init_raw_data;
   cs = 1;
@@ -100,6 +102,7 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
 
   CalibrateGyroscope(gyro_raw); // calibrate the gyroscope and find the threshold for x, y, and z.
   led = !led;
+  printf("========[Initiation finish.]========\r\n");
 }
 
 float ConvertTOVelocity(int16_t rawdata)
