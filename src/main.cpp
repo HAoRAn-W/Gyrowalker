@@ -8,15 +8,31 @@
 #include <stdio.h>
 #include "gyroscope.h"
 #include "fs.h"
+#include "Button.h"
 
-bool start_flag = true; // use reset button to start recording
-// Set up the button to trigger an erase
-InterruptIn irq(BUTTON1);
+bool start_flag = false; // trigger start record
+bool erase_flag = false; // trigger erase function
 
-static auto erase_event = mbed_event_queue() -> make_user_allocated_event(erase);
+Button button(USER_BUTTON);
+// double click to start
+void onDoubleClick()
+{
+  start_flag = true;
+}
+
+// long press to reset
+void onLongPress()
+{
+  erase_flag = true;
+}
+
 int main()
 {
-  irq.fall(std::ref(erase_event));
+  // attach ISR for button click
+  button.onDoubleClick(&onDoubleClick);
+
+  // attach ISR for button double click
+  button.onLongClick(&onLongPress);
 
   Gyroscope_RawData raw_data;
   float record = 0.0f;
@@ -57,6 +73,11 @@ int main()
       // update print result
       record = distance;
       PowerOff(); // turn off gyroscope
+    }
+    if (erase_flag)
+    {
+      erase();
+      erase_flag = false;
     }
   }
 }
