@@ -28,10 +28,10 @@ void onLongPress()
 
 int main()
 {
-  // attach ISR for button click
+  // attach ISR for button double click
   button.onDoubleClick(&onDoubleClick);
 
-  // attach ISR for button double click
+  // attach ISR for button long press
   button.onLongClick(&onLongPress);
 
   Gyroscope_RawData raw_data;
