@@ -4,11 +4,13 @@
 BlockDevice *bd = BlockDevice::get_default_instance();
 LittleFileSystem fs("fs");
 FILE *f; // file handle
+DigitalOut redled(LED_RED);
 
 // erase the block device if corrupted
 void erase()
 {
     printf("\r\nInitializing the block device... ");
+    redled = !redled;
     fflush(stdout);
     int err = bd->init();
     printf("%s\n", (err ? "Fail :(" : "OK"));
@@ -34,6 +36,7 @@ void erase()
     {
         error("error: %s (%d)\n", strerror(-err), err);
     }
+    redled = !redled;
 }
 
 void MountFileSystem()
