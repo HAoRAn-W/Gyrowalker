@@ -3,11 +3,9 @@ A embbed project to measure distance with gyroscope
 ## Functions
 calculate distance with and only with gyroscope
 
-LCD display(todo) to show distance
+a start/erase button
 
-a start/stop button(todo)
-
-LED indicates movement(todo)
+LED indication when calibrating gyroscope and resetting storage
 
 ## Hardware & Framework
 Board: STM32F429I
@@ -15,6 +13,8 @@ Board: STM32F429I
 Gyroscope: I3G4250D
 
 Framework: Mbed
+
+Editor: VS Code + PlatformIO
 
 ## Conigurations
 | field      | value |
@@ -25,19 +25,22 @@ Framework: Mbed
 
 
 ## Steps
-0.press user button to start(todo), and LED flash when recording
+I. Connect board with PC and see last distance record from terminal
 
+II. Double click user button to start recording (20s)
+
+III. If storage is coruptted, long press user button to erase block storage
+
+## Process of gyroscope
 1.set up SPI device
 
-2.configure gyrometer control registers and calibrate(128 samples)
+2.configure gyroscope control registers and calibrate(128 samples)
 
-3.read from gyrometer every t seconds
+3.read from gyroscope every 0.5 seconds for 20 seconds
 
-4.convert the raw data linear velocity
+4.convert the raw data to dps than rad/s than linear velocity
 
-5.display on LCD
+5.calculate the distance
 
-6.collect 20 seconds of velocity data, sampled at 0.5 second intervals
-
-7.calculate distance with timer
+6.write record to file
 
