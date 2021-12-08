@@ -1,6 +1,6 @@
 /*
-* Project:    Challenge - Gyrowalker
-* File:       gyroscope.cpp
+* Project:    Gyrowalker
+* File:       Gyroscope.cpp
 * Author:     Haoran Wang
 */
 
@@ -105,7 +105,7 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
   printf("========[Initiation finish.]========\r\n");
 }
 
-float ConvertTOVelocity(int16_t rawdata)
+float ConvertToVelocity(int16_t rawdata)
 {
   float velocity = rawdata * sensitivity * DEGREE_TO_RAD * MY_LEG;
   return velocity;
