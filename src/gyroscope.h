@@ -46,12 +46,19 @@
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
 #define POWEROFF 0x00
 
+#define SAMPLE_NUMBER 20;
+
+// Array to store axes data
+int16_t X_Data_Array[SAMPLE_NUMBER];
+int16_t Y_Data_Array[SAMPLE_NUMBER];
+int16_t Z_Data_Array[SAMPLE_NUMBER];
+
 // Initialization parameters
 typedef struct
 {
-    uint8_t odr;
-    uint8_t hpf;
-    uint8_t fullscale;
+    uint8_t odr; // output data rate
+    uint8_t hpf; // high pass filter selection
+    uint8_t fullscale; // full sacle selection
 } Gyroscope_Init_Parameters;
 
 
@@ -69,15 +76,6 @@ typedef struct {
     int16_t y_calibrated; // Y-axis calibrated data
     int16_t z_calibrated; // Z-axis calibrated data
 } Gyroscope_CalibratedData;
-
-
-// Data in dps
-typedef struct
-{
-    int16_t x_dps;
-    int16_t y_dps;
-    int16_t z_dps;
-} Gyroscope_DPS;
 
 // Function prototypes
 

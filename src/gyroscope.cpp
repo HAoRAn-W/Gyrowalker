@@ -10,21 +10,21 @@
 SPI gyroscope(PF_9, PF_8, PF_7); // mosi, miso, sclk
 DigitalOut cs(PC_1);
 
-DigitalOut led(LED3); // indicate initialize
+DigitalOut led(LED3); // indicate initialization
 
-int16_t x_threshold;
-int16_t y_threshold;
-int16_t z_threshold;
+int16_t x_threshold; // X-axis calibration threshold
+int16_t y_threshold; // Y-axis calibration threshold
+int16_t z_threshold; // Z-axis calibration threshold
 
-int16_t x_sample;
-int16_t y_sample;
-int16_t z_sample;
+int16_t x_sample; // X-axis zero-rate level sample
+int16_t y_sample; // Y-axis zero-rate level sample
+int16_t z_sample; // Z-axis zero-rate level sample
 
 float sensitivity = 0.0f;
 
 Gyroscope_RawData *gyro_raw;
-Gyroscope_DPS gyro_dps;
 
+// Write I/O
 void WriteByte(uint8_t address, uint8_t data)
 {
   cs = 0;
@@ -33,16 +33,21 @@ void WriteByte(uint8_t address, uint8_t data)
   cs = 1;
 }
 
+// Get raw data from gyroscope
 void GetGyroValue(Gyroscope_RawData *rawdata)
 {
   cs = 0;
-  gyroscope.write(OUT_X_L | 0x80 | 0x40);
+  gyroscope.write(OUT_X_L | 0x80 | 0x40); // auto-incremented read
   rawdata->x_raw = gyroscope.write(0xff) | gyroscope.write(0xff) << 8;
   rawdata->y_raw = gyroscope.write(0xff) | gyroscope.write(0xff) << 8;
   rawdata->z_raw = gyroscope.write(0xff) | gyroscope.write(0xff) << 8;
   cs = 1;
 }
 
+// Calibrate gyroscope before recording
+// Find the "turn-on" zero rate level
+// Set up thresholds for three axes
+// Data below the corresponding threshold will be treated as zero to offset random vibrations when walking
 void CalibrateGyroscope(Gyroscope_RawData *rawdata)
 {
   int16_t sumX = 0;
@@ -67,6 +72,7 @@ void CalibrateGyroscope(Gyroscope_RawData *rawdata)
   printf("========[Calibration finish.]========\r\n");
 }
 
+// Initiate gyroscope, set up control registers
 void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_RawData *init_raw_data)
 {
   printf("\r\n========[Initializing gyroscope...]========\r\n");
@@ -105,18 +111,24 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
   printf("========[Initiation finish.]========\r\n");
 }
 
-float ConvertToVelocity(int16_t rawdata)
+// convert dps to linear velocity
+float ConvertToVelocity(int16_t axis_data)
 {
-  float velocity = rawdata * sensitivity * DEGREE_TO_RAD * MY_LEG;
+  float velocity = axis_data * sensitivity * DEGREE_TO_RAD * MY_LEG;
   return velocity;
 }
 
+// convert raw data to calibrated data directly
 void GetCalibratedRawData()
 {
   GetGyroValue(gyro_raw);
+
+  // offset the zero rate level
   gyro_raw->x_raw -= x_sample;
   gyro_raw->y_raw -= y_sample;
   gyro_raw->z_raw -= z_sample;
+
+  // put data below threshold to zero
   if (abs(gyro_raw->x_raw) < abs(x_threshold))
     gyro_raw->x_raw = 0;
   if (abs(gyro_raw->y_raw) < abs(y_threshold))
@@ -126,7 +138,7 @@ void GetCalibratedRawData()
 }
 
 
-//poweroff
+// turn off the gyroscope
 void PowerOff(){
   WriteByte(CTRL_REG_1, 0x00);
 }
