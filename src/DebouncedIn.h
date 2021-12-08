@@ -24,7 +24,7 @@ SOFTWARE.
 */
 #include <mbed.h>
 
-#define WAIT_TIME 0.01f // 10ms
+#define WAIT_TIME 10ms // 10ms
 
 // A debounced InterruptIn for button
 class DebouncedIn

@@ -5,7 +5,7 @@
 */
 
 #include <mbed.h>
-#include "gyroscope.h"
+#include "Gyroscope.h"
 
 SPI gyroscope(PF_9, PF_8, PF_7); // mosi, miso, sclk
 DigitalOut cs(PC_1);

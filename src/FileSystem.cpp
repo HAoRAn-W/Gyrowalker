@@ -1,5 +1,5 @@
 #include <mbed.h>
-#include "fs.h"
+#include "FileSystem.h"
 
 BlockDevice *bd = BlockDevice::get_default_instance();
 LittleFileSystem fs("fs");

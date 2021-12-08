@@ -1,13 +1,13 @@
 /*
-* Project:    Challenge - Gyrowalker
+* Project:    Gyrowalker
 * File:       main.cpp
 * Author:     Haoran Wang
 */
 
 #include <mbed.h>
 #include <stdio.h>
-#include "gyroscope.h"
-#include "fs.h"
+#include "Gyroscope.h"
+#include "FileSystem.h"
 #include "Button.h"
 
 bool start_flag = false; // trigger start record
