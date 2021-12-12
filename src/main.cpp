@@ -13,6 +13,12 @@
 // triggered by double click button -> start recording
 bool start_flag = false;
 
+// sample time 20 seconds
+int sample_time = SAMPLE_TIME_20;
+
+// every 0.05s sample a data
+float sample_interval = SAMPLE_INTERVAL_0_05;
+
 // triggered by long press button -> erase
 bool erase_flag = false; 
 
@@ -31,8 +37,15 @@ void onLongPress()
   erase_flag = true;
 }
 
+// click button, doing nothing
+void onClick(){
+
+}
+
 int main()
 {
+
+  button.onClick(&onClick);
   // attach ISR for button double click
   button.onDoubleClick(&onDoubleClick);
 
@@ -69,14 +82,23 @@ int main()
       float distance = 0.0f;
       float velocity = 0.0f;
 
-      for (int i = 0; i < 40; i++)
+      //todo sample faster and move calculate to later
+      int count = sample_time / sample_interval;
+      int16_t Z_Data_Array[count];
+      int sample_us = sample_interval * 1000000;
+      for (int i = 0; i < count; i++)
       {
-        wait_us(500000);
         GetCalibratedRawData();
-        velocity = ConvertToVelocity(raw_data.z_raw);
-        distance += abs(velocity / 2);
-        printf("distance: %d/%f, \r\n", i, distance);
+        Z_Data_Array[i] = raw_data.z_raw;
+        wait_us(sample_us);
+        // GetCalibratedRawData();
+        // velocity = ConvertToVelocity(raw_data.z_raw);
+        // // printf("%f, \r\n", velocity);
+        // distance += abs(velocity * sample_interval);
+        // // printf("distance: %d/%f, \r\n", i, distance);
       }
+      
+      float distance = GetDistance(Z_Data_Array);
 
       // write to file
       MountFileSystem();
