@@ -13,12 +13,6 @@
 // triggered by double click button -> start recording
 bool start_flag = false;
 
-// sample time 20 seconds
-int sample_time = SAMPLE_TIME_20;
-
-// every 0.05s sample a data
-float sample_interval = SAMPLE_INTERVAL_0_05;
-
 // triggered by long press button -> erase
 bool erase_flag = false; 
 
@@ -80,14 +74,12 @@ int main()
       InitiateGyroscope(&init_parameters, &raw_data);
 
       //todo sample faster and move calculate to later
-      int count = sample_time / sample_interval;
-      int16_t Z_Data_Array[count];
-      int sample_us = sample_interval * 1000000;
-      for (int i = 0; i < count; i++)
+      int16_t Z_Data_Array[400];
+      for (int i = 0; i < 400; i++)
       {
         GetCalibratedRawData();
         Z_Data_Array[i] = raw_data.z_raw;
-        wait_us(sample_us);
+        wait_us(50000);
         // GetCalibratedRawData();
         // velocity = ConvertToVelocity(raw_data.z_raw);
         // // printf("%f, \r\n", velocity);

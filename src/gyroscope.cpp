@@ -122,8 +122,7 @@ float ConvertToVelocity(int16_t axis_data)
 // Calculate distance from raw data array;
 float GetDistance(int16_t arr[]){
   float distance = 0.00f;
-  int n = sizeof(arr);
-  for(int i = 0; i < n; i++){
+  for(int i = 0; i < 400; i++){
     float v = ConvertToVelocity(arr[i]);
     distance += abs(v * 0.05f);
     // printf("distance: %d/%f, \r\n", i, distance);
