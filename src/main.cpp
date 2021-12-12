@@ -61,12 +61,12 @@ int main()
   // read last distance record from file
   MountFileSystem();
   ReadFile(&record);
-  fflush(stdout);
   UnmountFileSystem();
 
   while (1)
   {
     printf("\rLast record: %f m", record);
+     fflush(stdout);
 
     // record process
     if (start_flag)
@@ -78,9 +78,6 @@ int main()
       init_parameters.fullscale = 0x10;
 
       InitiateGyroscope(&init_parameters, &raw_data);
-
-      float distance = 0.0f;
-      float velocity = 0.0f;
 
       //todo sample faster and move calculate to later
       int count = sample_time / sample_interval;
