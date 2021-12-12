@@ -45,6 +45,7 @@ void erase()
     redled = !redled;
 }
 
+// Mount the file system
 void MountFileSystem()
 {
     printf("Mounting the filesystem... ");
@@ -65,9 +66,9 @@ void MountFileSystem()
     }
 }
 
+// Unmount the file system
 void UnmountFileSystem()
 {
-    // Unmount the file system
     printf("Unmounting... ");
     fflush(stdout);
     int err = fs.unmount();

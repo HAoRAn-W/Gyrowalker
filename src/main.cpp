@@ -14,7 +14,7 @@
 bool start_flag = false;
 
 // triggered by long press button -> erase
-bool erase_flag = false; 
+bool erase_flag = false;
 
 // An extended button API
 Button button(USER_BUTTON);
@@ -32,8 +32,8 @@ void onLongPress()
 }
 
 // click button, doing nothing
-void onClick(){
-
+void onClick()
+{
 }
 
 int main()
@@ -60,7 +60,7 @@ int main()
   while (1)
   {
     printf("\rLast record: %f m", record);
-     fflush(stdout);
+    fflush(stdout);
 
     // record process
     if (start_flag)
@@ -80,13 +80,8 @@ int main()
         GetCalibratedRawData();
         Z_Data_Array[i] = raw_data.z_raw;
         wait_us(50000);
-        // GetCalibratedRawData();
-        // velocity = ConvertToVelocity(raw_data.z_raw);
-        // // printf("%f, \r\n", velocity);
-        // distance += abs(velocity * sample_interval);
-        // // printf("distance: %d/%f, \r\n", i, distance);
       }
-      
+
       float distance = GetDistance(Z_Data_Array);
 
       // write to file

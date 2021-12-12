@@ -7,7 +7,6 @@
 #include <mbed.h>
 
 // Register addresses
-
 #define WHO_AM_I 0x0F
 
 #define CTRL_REG_1 0x20 // control register 1
@@ -26,28 +25,25 @@
 #define OUT_Z_H 0x2D // Z-axis angular rate data high
 
 // Fullscale selections
-
-#define FULL_SCALE_245 0x00 // full scale 245 dps
-#define FULL_SCALE_500 0x10 // full scale 500 dps
-#define FULL_SCALE_2000 0x20 // full scale 2000 dps
+#define FULL_SCALE_245 0x00      // full scale 245 dps
+#define FULL_SCALE_500 0x10      // full scale 500 dps
+#define FULL_SCALE_2000 0x20     // full scale 2000 dps
 #define FULL_SCALE_2000_ALT 0x30 // full scale 2000 dps
 
 // Sensitivities in dps/digit
-
 #define SENSITIVITY_245 0.00875f // 245 dps typical sensitivity
-#define SENSITIVITY_500 0.0175f // 500 dps typical sensitivity
-#define SENSITIVITY_2000 0.07f // 2000 dps typical sensitivity
+#define SENSITIVITY_500 0.0175f  // 500 dps typical sensitivity
+#define SENSITIVITY_2000 0.07f   // 2000 dps typical sensitivity
 
 // Data rate and bandwidth
 #define ODR_800_CUTOFF_110 0xf0
 #define ODR_800_HIGH_PASS_56 0x00
 
-
 // Convert constants
-#define MY_LEG 0.9f // put board on left leg 0.8m above ground
-#define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
+#define MY_LEG 0.9f           // put board on left leg 0.8m above ground
+#define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180)
 
-#define POWERON 0x0f // turn gyroscope
+#define POWERON 0x0f  // turn gyroscope
 #define POWEROFF 0x00 // turnoff gyroscope
 
 #define SAMPLE_TIME_20 20
@@ -56,11 +52,10 @@
 // Initialization parameters
 typedef struct
 {
-    uint8_t odr; // output data rate
-    uint8_t hpf; // high pass filter selection
+    uint8_t odr;       // output data rate
+    uint8_t hpf;       // high pass filter selection
     uint8_t fullscale; // full sacle selection
 } Gyroscope_Init_Parameters;
-
 
 // Raw data
 typedef struct
@@ -71,7 +66,8 @@ typedef struct
 } Gyroscope_RawData;
 
 // Calibrated data
-typedef struct {
+typedef struct
+{
     int16_t x_calibrated; // X-axis calibrated data
     int16_t y_calibrated; // Y-axis calibrated data
     int16_t z_calibrated; // Z-axis calibrated data

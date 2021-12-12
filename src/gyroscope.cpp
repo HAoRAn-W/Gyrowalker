@@ -84,8 +84,8 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
   gyroscope.frequency(1000000); // clock frequency deafult 1 MHz max:10MHz
 
   WriteByte(CTRL_REG_1, init_parameters->odr | POWERON); // set ODR Bandwidth and enable all 3 axises
-  WriteByte(CTRL_REG_2, init_parameters->hpf); // no high pass filter
-  WriteByte(CTRL_REG_4, init_parameters->fullscale); // LSB, full sacle selection: 500dps
+  WriteByte(CTRL_REG_2, init_parameters->hpf);           // no high pass filter
+  WriteByte(CTRL_REG_4, init_parameters->fullscale);     // LSB, full sacle selection: 500dps
 
   switch (init_parameters->fullscale)
   {
@@ -118,15 +118,14 @@ float ConvertToVelocity(int16_t axis_data)
   return velocity;
 }
 
-
 // Calculate distance from raw data array;
-float GetDistance(int16_t arr[]){
+float GetDistance(int16_t arr[])
+{
   float distance = 0.00f;
-  for(int i = 0; i < 400; i++){
+  for (int i = 0; i < 400; i++)
+  {
     float v = ConvertToVelocity(arr[i]);
     distance += abs(v * 0.05f);
-    // printf("distance: %d/%f, \r\n", i, distance);
-    // printf("%f \r\n", i, distance);
   }
   return distance;
 }
@@ -150,8 +149,8 @@ void GetCalibratedRawData()
     gyro_raw->z_raw = 0;
 }
 
-
 // turn off the gyroscope
-void PowerOff(){
+void PowerOff()
+{
   WriteByte(CTRL_REG_1, 0x00);
 }
