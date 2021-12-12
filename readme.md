@@ -19,9 +19,10 @@ Editor: VS Code + PlatformIO
 ## Conigurations
 | field      | value |
 | ----------- | ----------- |
-| scale   | 500      |
-|output data rate | 800Hz|
-|cutoff frequency | 30Hz|
+| scale   | 500 dps      |
+|output data rate | 800 Hz|
+|cutoff frequency | 110 Hz|
+|high-pass filter | 56 Hz|
 
 
 ## Steps
