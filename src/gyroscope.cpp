@@ -83,8 +83,8 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
   gyroscope.format(8, 3);       // 8 bits per SPI frame; polarity 1, phase 0
   gyroscope.frequency(1000000); // clock frequency deafult 1 MHz max:10MHz
 
-  WriteByte(CTRL_REG_1, init_parameters->odr);       // ODR  Bandwidth , enable all 3 axises
-  WriteByte(CTRL_REG_2, init_parameters->hpf);       // no high pass filter
+  WriteByte(CTRL_REG_1, init_parameters->odr | POWERON); // set ODR Bandwidth and enable all 3 axises
+  WriteByte(CTRL_REG_2, init_parameters->hpf); // no high pass filter
   WriteByte(CTRL_REG_4, init_parameters->fullscale); // LSB, full sacle selection: 500dps
 
   switch (init_parameters->fullscale)

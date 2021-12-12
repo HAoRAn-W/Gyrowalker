@@ -73,9 +73,9 @@ int main()
     {
       // set up gyroscope initiation parameters
       Gyroscope_Init_Parameters init_parameters;
-      init_parameters.odr = 0xff;
-      init_parameters.hpf = 0x00;
-      init_parameters.fullscale = 0x10;
+      init_parameters.odr = ODR_800_CUTOFF_110;
+      init_parameters.hpf = ODR_800_HIGH_PASS_56;
+      init_parameters.fullscale = FULL_SCALE_500;
 
       InitiateGyroscope(&init_parameters, &raw_data);
 

@@ -39,12 +39,16 @@
 #define SENSITIVITY_2000 0.07f // 2000 dps typical sensitivity
 
 // Data rate and bandwidth
+#define ODR_800_CUTOFF_110 0xf0
+#define ODR_800_HIGH_PASS_56 0x00
 
 
 // Convert constants
 #define MY_LEG 0.9f // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
-#define POWEROFF 0x00
+
+#define POWERON 0x0f // turn gyroscope
+#define POWEROFF 0x00 // turnoff gyroscope
 
 #define SAMPLE_TIME_20 20
 #define SAMPLE_INTERVAL_0_05 0.005f
