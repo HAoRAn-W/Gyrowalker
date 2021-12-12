@@ -118,6 +118,20 @@ float ConvertToVelocity(int16_t axis_data)
   return velocity;
 }
 
+
+// Calculate distance from raw data array;
+float GetDistance(int16_t arr[]){
+  float distance = 0.00f;
+  int n = sizeof(arr) / sizeof(arr[0]);
+  for(int i = 0; i < n; i++){
+    float v = ConvertToVelocity(arr[i]);
+    distance += abs(v * 0.05f);
+    // printf("distance: %d/%f, \r\n", i, distance);
+    // printf("%f \r\n", i, distance);
+  }
+  return distance;
+}
+
 // convert raw data to calibrated data directly
 void GetCalibratedRawData()
 {

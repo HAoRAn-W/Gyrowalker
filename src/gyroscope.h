@@ -42,16 +42,12 @@
 
 
 // Convert constants
-#define MY_LEG 0.8f // put board on left leg 0.8m above ground
+#define MY_LEG 0.9f // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180) 
 #define POWEROFF 0x00
 
-#define SAMPLE_NUMBER 20;
-
-// Array to store axes data
-int16_t X_Data_Array[SAMPLE_NUMBER];
-int16_t Y_Data_Array[SAMPLE_NUMBER];
-int16_t Z_Data_Array[SAMPLE_NUMBER];
+#define SAMPLE_TIME_20 20
+#define SAMPLE_INTERVAL_0_05 0.005f
 
 // Initialization parameters
 typedef struct
@@ -93,6 +89,9 @@ void InitiateGyroscope(Gyroscope_Init_Parameters *init_parameters, Gyroscope_Raw
 
 // Data conversion: dps -> m/s
 float ConvertToVelocity(int16_t rawdata);
+
+// Calculate distance from raw data array;
+float GetDistance(int16_t arr[]);
 
 // Get calibrated data
 void GetCalibratedRawData();
