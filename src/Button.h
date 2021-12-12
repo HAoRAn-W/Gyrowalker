@@ -35,6 +35,8 @@ class Button
 public:
     Button(PinName pin, PinMode mode = PullNone);
 
+    void onClick(Callback<void()> clickHandler) {onClickHandler = clickHandler;};
+
     void onLongClick(Callback<void()> longHandler) { onLongClickHandler = longHandler; };
 
     void onDoubleClick(Callback<void()> doubleHandler) { onDoubleClickHandler = doubleHandler; };
