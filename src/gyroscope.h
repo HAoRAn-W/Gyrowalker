@@ -40,7 +40,7 @@
 #define ODR_800_HIGH_PASS_56 0x00
 
 // Convert constants
-#define MY_LEG 0.9f           // put board on left leg 0.8m above ground
+#define MY_LEG 1           // put board on left leg 0.8m above ground
 #define DEGREE_TO_RAD 0.0175f // rad = dgree * (pi / 180)
 
 #define POWERON 0x0f  // turn gyroscope
