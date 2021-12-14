@@ -66,7 +66,7 @@ void CalibrateGyroscope(Gyroscope_RawData *rawdata)
     wait_us(10000);
   }
 
-  x_sample = sumX >> 7;
+  x_sample = sumX >> 7; // 128 is 2^7
   y_sample = sumY >> 7;
   z_sample = sumZ >> 7;
   printf("========[Calibration finish.]========\r\n");

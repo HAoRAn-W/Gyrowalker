@@ -56,7 +56,7 @@ int main()
   MountFileSystem();
   ReadFile(&record);
   UnmountFileSystem();
-  
+
   float v_avg; // average speed
 
   while (1)

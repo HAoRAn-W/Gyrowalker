@@ -11,10 +11,13 @@
 #include <BlockDevice.h>
 #include <LittleFileSystem.h>
 
+// Erase the block device
 void erase();
 
+// Mount the file system
 void MountFileSystem();
 
+// Unmount the file system
 void UnmountFileSystem();
 
 // write data to file
