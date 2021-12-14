@@ -56,10 +56,13 @@ int main()
   MountFileSystem();
   ReadFile(&record);
   UnmountFileSystem();
+  
+  float v_avg; // average speed
 
   while (1)
   {
-    printf("\rLast record: %f m", record);
+    v_avg = record / 20;
+    printf("\rLast record: %f m, average speed: %f m/s", record, v_avg);
     fflush(stdout);
 
     // record process
